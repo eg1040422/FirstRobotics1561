@@ -12,10 +12,9 @@
 #include "ctre/Phoenix.h"
 #include <frc/GenericHID.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-//#include <networktables/NetworkTable.h>
-//#include <networktables/NetworkTableEntry.h>
-//#include <networktables/NetworkTableInstance.h>
-//#include <frc/NetworkTable.h>//- gets rid of all other errors without last 3 lines needed but causes include errors? But what and why
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableEntry.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -54,6 +53,8 @@ class Robot : public frc::TimedRobot {
   frc::Solenoid ClimbLock{4};
   frc::Solenoid ClimbRelease{5};
   frc::Timer Timer;
+  nt::NetworkTableEntry xEntry;
+  nt::NetworkTableEntry yEntry;
   double LeftDriveSpeed;
   double RightDriveSpeed;
   double Deadband;

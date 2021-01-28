@@ -62,18 +62,21 @@ void Robot::TeleopInit()
 }
 void Robot::TeleopPeriodic()
 {
-  nt::NetworkTable Table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  nt::NetworkTableEntry Tx = Table.GetEntry("Tx");
-  nt::NetworkTableEntry Ty = Table.GetEntry("Ty");
-  nt::NetworkTableEntry Ta = Table.GetEntry("Ta");
-  nt::NetworkTableEntry Tv = Table.GetEntry("Tv");
-  double x = Tx.GetDouble(0.0);
-  double y = Ty.GetDouble(0.0);
-  double Area = Ta.GetDouble(0.0);
-  double Validtarget = Tv.GetDouble(0.0);
+  auto Inst = nt::NetworkTableInstance::GetDefault();
+  auto Table = Inst.GetTable("limelight");
+  xEntry = Table->GetEntry("X");
+  yEntry = Table->GetEntry("Y");
+  nt::NetworkTableEntry tx = Table->GetEntry("tx");
+  nt::NetworkTableEntry ty = Table->GetEntry("ty");
+  nt::NetworkTableEntry ta= Table->GetEntry("ta");
+  nt::NetworkTableEntry tv = Table->GetEntry("tv");
+  double X = tx.GetDouble(0.0);
+  double Y = ty.GetDouble(0.0);
+  double Area = ta.GetDouble(0.0);
+  double Validtarget = tv.GetDouble(0.0);
   frc::SmartDashboard::PutNumber("LimeLightValidTarget", Validtarget);
-  frc::SmartDashboard::PutNumber("LimelightX", x);
-  frc::SmartDashboard::PutNumber("LimelightY", y);
+  frc::SmartDashboard::PutNumber("LimelightX", X);
+  frc::SmartDashboard::PutNumber("LimelightY", Y);
   frc::SmartDashboard::PutNumber("LimelightArea", Area);
   frc::SmartDashboard::PutBoolean("Locked", ClimbLock.Get());
   float Kp = 0.02f;
@@ -85,7 +88,7 @@ void Robot::TeleopPeriodic()
     frc::SmartDashboard::PutNumber("ShooterTopVel", ShooterTop.GetSelectedSensorVelocity());
     if(Validtarget == 1)
     {
-      double adjust = (Kp * Tx.GetDouble(0.0));
+      double adjust = (Kp *  tx.GetDouble(0.0));
       if(adjust <= 0){adjust = adjust - 0.1;}
       else{adjust = adjust + 0.1;}
       frc::SmartDashboard::PutNumber("adjust", adjust);
