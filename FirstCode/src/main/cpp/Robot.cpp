@@ -6,7 +6,10 @@
 
 void Robot::RobotInit()
 {
-
+  LeftDriveSpeed = 0;
+  RightDriveSpeed = 0;
+  Deadband = .15;
+  ShooterHigh = true;
 }
 void Robot::RobotPeriodic()
 {
@@ -59,31 +62,32 @@ void Robot::TeleopInit()
 }
 void Robot::TeleopPeriodic()
 {
-NetworkTable Table = NetworkTableInstance.getDefault().getTable("limelight");
-NetworkTableEntry Tx = Table.getEntry("Tx");
-NetworkTableEntry Ty = Table.getEntry("Ty");
-NetworkTableEntry Ta = Table.getEntry("Ta");
-NetworkTableEntry Tv = Table.getEntry("Tv");
+nt::NetworkTable Table = nt::NetworkTableInstance.getDefault().getTable("limelight");
+nt::NetworkTableEntry Tx = Table.GetEntry("Tx");
+nt::NetworkTableEntry Ty = Table.GetEntry("Ty");
+nt::NetworkTableEntry Ta = Table.GetEntry("Ta");
+nt::NetworkTableEntry Tv = Table.GetEntry("Tv");
    
-  double x = Tx.getDouble(0.0);
-  double y = Ty.getDouble(0.0);
-  double area = Ta.getDouble(0.0);
-  double validtarget = Tv.getDouble(0.0);
-  SmartDashboard.putNumber("LimeLightValidTarget", validtarget);
-  SmartDashboard.putNumber("LimelightX", x);
-  SmartDashboard.putNumber("LimelightY", y);
-  SmartDashboard.putNumber("LimelightArea", area);
-  SmartDashboard.putBoolean("Locked", ClimbLock.Get());
+  double x = Tx.GetDouble(0.0);
+  double y = Ty.GetDouble(0.0);
+  double Area = Ta.GetDouble(0.0);
+  double Validtarget = Tv.GetDouble(0.0);
+  frc::SmartDashboard SmartDashboard;
+  SmartDashboard.PutNumber("LimeLightValidTarget", Validtarget);
+  SmartDashboard.PutNumber("LimelightX", x);
+  SmartDashboard.PutNumber("LimelightY", y);
+  SmartDashboard.PutNumber("LimelightArea", Area);
+  SmartDashboard.PutBoolean("Locked", ClimbLock.Get());
   float Kp = 0.02f;
   float Kp2 = 0.0005f;
     //Shooter - Left Bumper
 
-    if(DriverJoystick.GetBumper(Hand.kLeft))
+    if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
     {
       
       SmartDashboard.putNumber("ShooterBottomVel", ShooterBottom.GetSelectedSensorVelocity());
       SmartDashboard.putNumber("ShooterTopVel", ShooterTop.GetSelectedSensorVelocity());
-      if(validtarget == 1)
+      if(Validtarget == 1)
       {
         double adjust = (Kp * Tx.GetDouble(0.0));
         if(adjust <= 0){adjust = adjust - 0.1;}
@@ -108,7 +112,7 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
       ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
       ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
       }
-      else if(DriverJoystick.getBumper(Hand.kRight))
+      else if(DriverJoystick.getBumper(frc::GenericHID::JoystickHand::kRightHand))
       {
       ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
       ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
@@ -123,7 +127,7 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
       ShooterTop.Set(ControlMode::PercentOutput, 0.35);
       ShooterBottom.Set(ControlMode::PercentOutput,0.35);
       }
-      else if(DriverJoystick.GetBumper(Hand.kRight))
+      else if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
       {
       ShooterTop.Set(ControlMode::PercentOutput, 0.55);
       ShooterBottom.Set(ControlMode::PercentOutput,0.55);
@@ -170,18 +174,18 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
     IntakeArm.Set(ControlMode::PercentOutput,0);
   }
   //Drive Control
-  if (DriverJoystick.GetTriggerAxis(Hand.kLeft)>0.5)
+  if (DriverJoystick.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)>0.5)
   {
-  LeftDriveSpeed = 0.35*(DriverJoystick.GetX(Hand.kRight) - DriverJoystick.GetY(Hand.kLeft));
-  RightDriveSpeed = 0.35 * (DriverJoystick.GetX(Hand.kRight) + DriverJoystick.GetY(Hand.kLeft));
+  LeftDriveSpeed = 0.35*(DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand) - DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand));
+  RightDriveSpeed = 0.35 * (DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand) + DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand));
   }
   else
   {
-  LeftDriveSpeed = 0.7*(DriverJoystick.GetX(Hand.kRight) - DriverJoystick.GetY(Hand.kLeft));
-  RightDriveSpeed = 0.7 * (DriverJoystick.GetX(Hand.kRight) + DriverJoystick.GetY(Hand.kLeft));
+  LeftDriveSpeed = 0.7*(DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand) - DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand));
+  RightDriveSpeed = 0.7 * (DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand) + DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand));
   }
 
-  if(!DriverJoystick.GetBumper(Hand.kLeft))
+  if(!DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
   {
     if (LeftDriveSpeed > 1.0)
     {
@@ -199,7 +203,7 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
     {
       RightDriveSpeed = -1.0;
     }
-    if (DriverJoystick.GetY(Hand.kLeft)<deadband && DriverJoystick.GetY(Hand.kLeft)>-deadband && DriverJoystick.GetX(Hand.kRight)<deadband && DriverJoystick.GetX(Hand.kRight)>-deadband)
+    if (DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand)<Deadband && DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand)>-Deadband && DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand)<Deadband && DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand)>-Deadband)
     {
     DriveLeft1.Set(ControlMode::PercentOutput, 0);
     DriveLeft2.Set(ControlMode::PercentOutput, 0);
@@ -215,12 +219,12 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
     }
   }
   // Solenoid Controls
-  if (DriverJoystick.GetStickButton(Hand.kLeft))
+  if (DriverJoystick.GetStickButton(frc::GenericHID::JoystickHand::kLeftHand))
   {
     ArmExtend.Set(true);
     ArmRetract.Set(false);
   }
-  else if (DriverJoystick.GetStickButton(Hand.kRight))
+  else if (DriverJoystick.GetStickButton(frc::GenericHID::JoystickHand::kRightHand))
   {
     ArmRetract.Set(true);
     ArmExtend.Set(false);
@@ -239,14 +243,14 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
     ShooterHigh = false;
   }
 
-  if (SecondController.GetTriggerAxis(Hand.kRight)>0.5)
+  if (SecondController.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)>0.5)
   {
-    if (SecondController.GetBumper(Hand.kLeft))
+    if (SecondController.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
     {
       ClimbLock.Set(true);
       ClimbRelease.Set(false);
     }
-    else if(SecondController.GetBumper(Hand.kRight))
+    else if(SecondController.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
     {
       ClimbLock.Set(false);
       ClimbRelease.Set(true);
@@ -254,9 +258,9 @@ NetworkTableEntry Tv = Table.getEntry("Tv");
   }
   //Lift Control
 
-  if (SecondController.GetTriggerAxis(Hand.kRight)> 0.5)
+  if (SecondController.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)> 0.5)
   {
-    double LiftSpeed = SecondController.GetY(Hand.kLeft);
+    double LiftSpeed = SecondController.GetY(frc::GenericHID::JoystickHand::kLeftHand);
     LiftMotor.Set(LiftSpeed);
   }
   else
