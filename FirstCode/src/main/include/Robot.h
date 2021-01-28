@@ -11,6 +11,7 @@
 #include <frc/Spark.h>
 #include "ctre/Phoenix.h"
 #include <frc/GenericHID.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 //#include <networktables/NetworkTable.h>
 //#include <networktables/NetworkTableEntry.h>
 //#include <networktables/NetworkTableInstance.h>

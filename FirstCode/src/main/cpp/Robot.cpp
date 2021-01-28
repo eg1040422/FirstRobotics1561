@@ -62,104 +62,99 @@ void Robot::TeleopInit()
 }
 void Robot::TeleopPeriodic()
 {
-nt::NetworkTable Table = nt::NetworkTableInstance.getDefault().getTable("limelight");
-nt::NetworkTableEntry Tx = Table.GetEntry("Tx");
-nt::NetworkTableEntry Ty = Table.GetEntry("Ty");
-nt::NetworkTableEntry Ta = Table.GetEntry("Ta");
-nt::NetworkTableEntry Tv = Table.GetEntry("Tv");
-   
+  nt::NetworkTable Table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  nt::NetworkTableEntry Tx = Table.GetEntry("Tx");
+  nt::NetworkTableEntry Ty = Table.GetEntry("Ty");
+  nt::NetworkTableEntry Ta = Table.GetEntry("Ta");
+  nt::NetworkTableEntry Tv = Table.GetEntry("Tv");
   double x = Tx.GetDouble(0.0);
   double y = Ty.GetDouble(0.0);
   double Area = Ta.GetDouble(0.0);
   double Validtarget = Tv.GetDouble(0.0);
-  frc::SmartDashboard SmartDashboard;
-  SmartDashboard.PutNumber("LimeLightValidTarget", Validtarget);
-  SmartDashboard.PutNumber("LimelightX", x);
-  SmartDashboard.PutNumber("LimelightY", y);
-  SmartDashboard.PutNumber("LimelightArea", Area);
-  SmartDashboard.PutBoolean("Locked", ClimbLock.Get());
+  frc::SmartDashboard::PutNumber("LimeLightValidTarget", Validtarget);
+  frc::SmartDashboard::PutNumber("LimelightX", x);
+  frc::SmartDashboard::PutNumber("LimelightY", y);
+  frc::SmartDashboard::PutNumber("LimelightArea", Area);
+  frc::SmartDashboard::PutBoolean("Locked", ClimbLock.Get());
   float Kp = 0.02f;
   float Kp2 = 0.0005f;
-    //Shooter - Left Bumper
-
-    if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
+  //Shooter - Left Bumper
+  if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
+  {
+    frc::SmartDashboard::PutNumber("ShooterBottomVel", ShooterBottom.GetSelectedSensorVelocity());
+    frc::SmartDashboard::PutNumber("ShooterTopVel", ShooterTop.GetSelectedSensorVelocity());
+    if(Validtarget == 1)
     {
-      
-      SmartDashboard.putNumber("ShooterBottomVel", ShooterBottom.GetSelectedSensorVelocity());
-      SmartDashboard.putNumber("ShooterTopVel", ShooterTop.GetSelectedSensorVelocity());
-      if(Validtarget == 1)
-      {
-        double adjust = (Kp * Tx.GetDouble(0.0));
-        if(adjust <= 0){adjust = adjust - 0.1;}
-        else{adjust = adjust + 0.1;}
-        SmartDashboard.PutNumber("adjust", adjust);
-        DriveLeft1.Set(ControlMode::PercentOutput, adjust);
-        DriveLeft2.Set(ControlMode::PercentOutput, adjust);
-        DriveRight1.Set(ControlMode::PercentOutput, adjust);
-        DriveRight2.Set(ControlMode::PercentOutput, adjust);
-      }
-      //following code came commented out. could be useful. idk.
-      /*double desiredVel = 0.0;
-      double shootingPowerBottom = 0.0;
-      double shootingPowerTop = 0.0;
-      double shooterVelBottom = ShooterBottom.getSelectedSensorVelocity();
-      double shooterVelTop = ShooterTop.getSelectedSensorVelocity();
-      if(ShooterHigh)
-      {
-      shootingPowerBottom =  shootingPowerBottom + (Kp2 * (desiredVel - shooterVelBottom));
-      shootingPowerTop =  shootingPowerTop + (Kp2 * (desiredVel - shooterVelTop));
-      SmartDashboard.putNumber("shootingPower", shootingPowerTop);
-      ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
-      ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
-      }
-      else if(DriverJoystick.getBumper(frc::GenericHID::JoystickHand::kRightHand))
-      {
-      ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
-      ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
-      }
-      else
-      {
-      ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
-      ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
-      }*/
-      if(ShooterHigh)
-      {
-      ShooterTop.Set(ControlMode::PercentOutput, 0.35);
-      ShooterBottom.Set(ControlMode::PercentOutput,0.35);
-      }
-      else if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
-      {
-      ShooterTop.Set(ControlMode::PercentOutput, 0.55);
-      ShooterBottom.Set(ControlMode::PercentOutput,0.55);
-      }
-      else
-      {
-      ShooterTop.Set(ControlMode::PercentOutput, 0.45);
-      ShooterBottom.Set(ControlMode::PercentOutput,0.45);
-      }
+      double adjust = (Kp * Tx.GetDouble(0.0));
+      if(adjust <= 0){adjust = adjust - 0.1;}
+      else{adjust = adjust + 0.1;}
+      frc::SmartDashboard::PutNumber("adjust", adjust);
+      DriveLeft1.Set(ControlMode::PercentOutput, adjust);
+      DriveLeft2.Set(ControlMode::PercentOutput, adjust);
+      DriveRight1.Set(ControlMode::PercentOutput, adjust);
+      DriveRight2.Set(ControlMode::PercentOutput, adjust);
+    }
+    //following code came commented out. could be useful. idk.
+    /*double desiredVel = 0.0;
+    double shootingPowerBottom = 0.0;
+    double shootingPowerTop = 0.0;
+    double shooterVelBottom = ShooterBottom.getSelectedSensorVelocity();
+    double shooterVelTop = ShooterTop.getSelectedSensorVelocity();
+    if(ShooterHigh)
+    {
+    shootingPowerBottom =  shootingPowerBottom + (Kp2 * (desiredVel - shooterVelBottom));
+    shootingPowerTop =  shootingPowerTop + (Kp2 * (desiredVel - shooterVelTop));
+    frc::SmartDashboard::putNumber("shootingPower", shootingPowerTop);
+    ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
+    ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
+    }
+    else if(DriverJoystick.getBumper(frc::GenericHID::JoystickHand::kRightHand))
+    {
+    ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
+    ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
     }
     else
     {
-      ShooterTop.Set(ControlMode::PercentOutput, 0);
-      ShooterBottom.Set(ControlMode::PercentOutput,0);
-    }
-
-    //Conveyor Control
-    if(DriverJoystick.GetRawButton(1))
+    ShooterTop.set(ControlMode.PercentOutput, shootingPowerTop);
+    ShooterBottom.set(ControlMode.PercentOutput, shootingPowerBottom);
+    }*/
+    if(ShooterHigh)
     {
-      IntakeLeft.Set(ControlMode::PercentOutput,0.3);
-      IntakeRight.Set(ControlMode::PercentOutput,-0.3);
+    ShooterTop.Set(ControlMode::PercentOutput, 0.35);
+    ShooterBottom.Set(ControlMode::PercentOutput,0.35);
     }
-    else if(DriverJoystick.GetRawButton(2))
+    else if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
     {
-      IntakeLeft.Set(ControlMode::PercentOutput,-0.3);
-      IntakeRight.Set(ControlMode::PercentOutput,0.3);
+    ShooterTop.Set(ControlMode::PercentOutput, 0.55);
+    ShooterBottom.Set(ControlMode::PercentOutput,0.55);
     }
     else
     {
-      IntakeLeft.Set(ControlMode::PercentOutput,0);
-      IntakeRight.Set(ControlMode::PercentOutput,0);
+    ShooterTop.Set(ControlMode::PercentOutput, 0.45);
+    ShooterBottom.Set(ControlMode::PercentOutput,0.45);
     }
+  }
+  else
+  {
+    ShooterTop.Set(ControlMode::PercentOutput, 0);
+    ShooterBottom.Set(ControlMode::PercentOutput,0);
+  }
+  //Conveyor Control
+  if(DriverJoystick.GetRawButton(1))
+  {
+    IntakeLeft.Set(ControlMode::PercentOutput,0.3);
+    IntakeRight.Set(ControlMode::PercentOutput,-0.3);
+  }
+  else if(DriverJoystick.GetRawButton(2))
+  {
+    IntakeLeft.Set(ControlMode::PercentOutput,-0.3);
+    IntakeRight.Set(ControlMode::PercentOutput,0.3);
+  }
+  else
+  {
+    IntakeLeft.Set(ControlMode::PercentOutput,0);
+    IntakeRight.Set(ControlMode::PercentOutput,0);
+  }
   // Intake Arm Control
   if(DriverJoystick.GetRawButton(3))
   {
