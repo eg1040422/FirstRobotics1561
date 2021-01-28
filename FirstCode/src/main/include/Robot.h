@@ -9,8 +9,11 @@
 #include <frc/Timer.h>
 #include <frc/Solenoid.h>
 #include <frc/Spark.h>
-#include <frc/NetworkTable.h>
 #include "ctre/Phoenix.h"
+/*#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableEntry.h>
+#include <networktables/NetworkTableInstance.h>*/
+#include <frc/NetworkTable.h>//- gets rid of all other errors without last 3 lines needed but causes include errors? But what and why
 
 class Robot : public frc::TimedRobot {
  public:

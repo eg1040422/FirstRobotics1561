@@ -59,11 +59,11 @@ void Robot::TeleopInit()
 }
 void Robot::TeleopPeriodic()
 {
-NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-NetworkTableEntry Tx = table.getEntry("tx");
-NetworkTableEntry Ty = table.getEntry("ty");
-NetworkTableEntry Ta = table.getEntry("ta");
-NetworkTableEntry Tv = table.getEntry("tv");
+NetworkTable Table = NetworkTableInstance.getDefault().getTable("limelight");
+NetworkTableEntry Tx = Table.getEntry("Tx");
+NetworkTableEntry Ty = Table.getEntry("Ty");
+NetworkTableEntry Ta = Table.getEntry("Ta");
+NetworkTableEntry Tv = Table.getEntry("Tv");
    
   double x = Tx.getDouble(0.0);
   double y = Ty.getDouble(0.0);
@@ -85,7 +85,7 @@ NetworkTableEntry Tv = table.getEntry("tv");
       SmartDashboard.putNumber("ShooterTopVel", ShooterTop.GetSelectedSensorVelocity());
       if(validtarget == 1)
       {
-        double adjust = (Kp * tx.GetDouble(0.0));
+        double adjust = (Kp * Tx.GetDouble(0.0));
         if(adjust <= 0){adjust = adjust - 0.1;}
         else{adjust = adjust + 0.1;}
         SmartDashboard.PutNumber("adjust", adjust);
