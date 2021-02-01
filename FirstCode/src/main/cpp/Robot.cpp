@@ -32,8 +32,8 @@ void Robot::AutonomousPeriodic()
   } 
   else if(Timer.Get()< 10.0)
   {
-    IntakeLeft.Set(ControlMode::PercentOutput,0.2);
-    IntakeRight.Set(ControlMode::PercentOutput,-0.2); //feed balls to shooter
+    IntakeLeft.Set(0.2);
+    IntakeRight.Set(-0.2); //feed balls to shooter
   }
   else if(Timer.Get() < 13)
   {
@@ -48,8 +48,8 @@ void Robot::AutonomousPeriodic()
     DriveLeft2.Set(ControlMode::PercentOutput,0);
     DriveRight1.Set(ControlMode::PercentOutput,0);
     DriveRight2.Set(ControlMode::PercentOutput,0);
-    IntakeLeft.Set(ControlMode::PercentOutput,0);
-    IntakeRight.Set(ControlMode::PercentOutput,0);
+    IntakeLeft.Set(0);
+    IntakeRight.Set(0);
     ShooterTop.Set(ControlMode::PercentOutput, 0);
     ShooterBottom.Set(ControlMode::PercentOutput,0);
   }
@@ -145,31 +145,31 @@ void Robot::TeleopPeriodic()
   //Conveyor Control
   if(DriverJoystick.GetRawButton(1))
   {
-    IntakeLeft.Set(ControlMode::PercentOutput,0.3);
-    IntakeRight.Set(ControlMode::PercentOutput,-0.3);
+    IntakeLeft.Set(0.3);
+    IntakeRight.Set(-0.3);
   }
   else if(DriverJoystick.GetRawButton(2))
   {
-    IntakeLeft.Set(ControlMode::PercentOutput,-0.3);
-    IntakeRight.Set(ControlMode::PercentOutput,0.3);
+    IntakeLeft.Set(-0.3);
+    IntakeRight.Set(0.3);
   }
   else
   {
-    IntakeLeft.Set(ControlMode::PercentOutput,0);
-    IntakeRight.Set(ControlMode::PercentOutput,0);
+    IntakeLeft.Set(0);
+    IntakeRight.Set(0);
   }
   // Intake Arm Control
   if(DriverJoystick.GetRawButton(3))
   {
-    IntakeArm.Set(ControlMode::PercentOutput,-0.3);
+    IntakeArm.Set(-0.3);
   }
   else if (DriverJoystick.GetRawButton(4))
   {
-    IntakeArm.Set(ControlMode::PercentOutput,0.3);
+    IntakeArm.Set(0.3);
   }
   else
   {
-    IntakeArm.Set(ControlMode::PercentOutput,0);
+    IntakeArm.Set(0);
   }
   //Drive Control
   if (DriverJoystick.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)>0.5)

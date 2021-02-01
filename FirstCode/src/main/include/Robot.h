@@ -15,6 +15,7 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableEntry.h>
+#include <frc/VictorSP.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -36,9 +37,9 @@ class Robot : public frc::TimedRobot {
  private:
   frc::XboxController DriverJoystick{0};
   frc::XboxController SecondController{1};
-  VictorSPX IntakeArm{0};
-  VictorSPX IntakeLeft{1};
-  VictorSPX IntakeRight{2};
+  frc::VictorSP IntakeArm{0};
+  frc::VictorSP IntakeLeft{1};
+  frc::VictorSP IntakeRight{2};
   frc::Spark LiftMotor{3};
   TalonSRX DriveLeft1{5};
   TalonSRX DriveLeft2{6};
