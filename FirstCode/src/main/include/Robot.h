@@ -35,9 +35,10 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
   void SetShooters(int);
-  void SetDrive(int);
+  void SetDrive(int,int);
   void SetIntake(int);
-
+  void SwitchThings(int,bool);
+  
  private:
   frc::XboxController DriverJoystick{0};
   frc::XboxController SecondController{1};

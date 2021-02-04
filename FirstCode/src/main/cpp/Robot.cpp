@@ -22,36 +22,24 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
-  ShooterUp.Set(true);
-  ShooterDown.Set(false);
-  ShooterHigh = true;
+  SwitchThings(1,1);
   if (Timer.Get() < 2.0)
   {
-    ShooterTop.Set(ControlMode::PercentOutput, 0.35);
-    ShooterBottom.Set(ControlMode::PercentOutput,0.35); // spin up shooter
+    SetShooters(0.35);// spin up shooter
   } 
   else if(Timer.Get()< 10.0)
   {
-    IntakeLeft.Set(0.2);
-    IntakeRight.Set(-0.2); //feed balls to shooter
+    SetIntake(0.2);//feed balls to shooter
   }
   else if(Timer.Get() < 13)
   {
-    DriveLeft1.Set(ControlMode::PercentOutput,.2);
-    DriveLeft2.Set(ControlMode::PercentOutput,.2);
-    DriveRight1.Set(ControlMode::PercentOutput,-.2);
-    DriveRight2.Set(ControlMode::PercentOutput,-.2);
+    SetDrive(2,-2);
   }
   else
   {
-    DriveLeft1.Set(ControlMode::PercentOutput,0);
-    DriveLeft2.Set(ControlMode::PercentOutput,0);
-    DriveRight1.Set(ControlMode::PercentOutput,0);
-    DriveRight2.Set(ControlMode::PercentOutput,0);
-    IntakeLeft.Set(0);
-    IntakeRight.Set(0);
-    ShooterTop.Set(ControlMode::PercentOutput, 0);
-    ShooterBottom.Set(ControlMode::PercentOutput,0);
+    SetDrive(0,0);
+    SetIntake(0);
+    SetShooters(0);
   }
 }
 void Robot::TeleopInit()
@@ -92,10 +80,7 @@ void Robot::TeleopPeriodic()
       if(adjust <= 0){adjust = adjust - 0.1;}
       else{adjust = adjust + 0.1;}
       frc::SmartDashboard::PutNumber("adjust", adjust);
-      DriveLeft1.Set(ControlMode::PercentOutput, adjust);
-      DriveLeft2.Set(ControlMode::PercentOutput, adjust);
-      DriveRight1.Set(ControlMode::PercentOutput, adjust);
-      DriveRight2.Set(ControlMode::PercentOutput, adjust);
+      SetDrive(adjust,adjust);
     }
     //following code came commented out. could be useful. idk.
     /*double desiredVel = 0.0;
@@ -123,40 +108,33 @@ void Robot::TeleopPeriodic()
     }*/
     if(ShooterHigh)
     {
-    ShooterTop.Set(ControlMode::PercentOutput, 0.35);
-    ShooterBottom.Set(ControlMode::PercentOutput,0.35);
+      SetShooters(0.35);
     }
     else if(DriverJoystick.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
     {
-    ShooterTop.Set(ControlMode::PercentOutput, 0.55);
-    ShooterBottom.Set(ControlMode::PercentOutput,0.55);
+      SetShooters(0.55);
     }
     else
     {
-    ShooterTop.Set(ControlMode::PercentOutput, 0.45);
-    ShooterBottom.Set(ControlMode::PercentOutput,0.45);
+      SetShooters(0.45);
     }
   }
   else
   {
-    ShooterTop.Set(ControlMode::PercentOutput, 0);
-    ShooterBottom.Set(ControlMode::PercentOutput,0);
+    SetShooters(0);
   }
   //Conveyor Control
   if(DriverJoystick.GetRawButton(1))
   {
-    IntakeLeft.Set(0.3);
-    IntakeRight.Set(-0.3);
+    SetIntake(0.3);
   }
   else if(DriverJoystick.GetRawButton(2))
   {
-    IntakeLeft.Set(-0.3);
-    IntakeRight.Set(0.3);
+    SetIntake(-0.3);
   }
   else
   {
-    IntakeLeft.Set(0);
-    IntakeRight.Set(0);
+    SetIntake(0);
   }
   // Intake Arm Control
   if(DriverJoystick.GetRawButton(3))
@@ -203,55 +181,41 @@ void Robot::TeleopPeriodic()
     }
     if (DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand)<Deadband && DriverJoystick.GetY(frc::GenericHID::JoystickHand::kLeftHand)>-Deadband && DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand)<Deadband && DriverJoystick.GetX(frc::GenericHID::JoystickHand::kRightHand)>-Deadband)
     {
-    DriveLeft1.Set(ControlMode::PercentOutput, 0);
-    DriveLeft2.Set(ControlMode::PercentOutput, 0);
-    DriveRight1.Set(ControlMode::PercentOutput, 0);
-    DriveRight2.Set(ControlMode::PercentOutput, 0);
+      SetDrive(0,0);
     }
     else
     {
-    DriveLeft1.Set(ControlMode::PercentOutput, LeftDriveSpeed);
-    DriveLeft2.Set(ControlMode::PercentOutput, LeftDriveSpeed);
-    DriveRight1.Set(ControlMode::PercentOutput, RightDriveSpeed);
-    DriveRight2.Set(ControlMode::PercentOutput, RightDriveSpeed);
+      SetDrive(LeftDriveSpeed, RightDriveSpeed);
     }
   }
   // Solenoid Controls
   if (DriverJoystick.GetStickButton(frc::GenericHID::JoystickHand::kLeftHand))
   {
-    ArmExtend.Set(true);
-    ArmRetract.Set(false);
+    SwitchThings(0,1);
   }
   else if (DriverJoystick.GetStickButton(frc::GenericHID::JoystickHand::kRightHand))
   {
-    ArmRetract.Set(true);
-    ArmExtend.Set(false);
+    SwitchThings(0,0);
   }
 
   if (DriverJoystick.GetPOV()==0)
   {
-    ShooterUp.Set(true);
-    ShooterDown.Set(false);
-    ShooterHigh = true;
+    SwitchThings(1,1);
   }
   else if(DriverJoystick.GetPOV()==180)
   {
-    ShooterUp.Set(false);
-    ShooterDown.Set(true);
-    ShooterHigh = false;
+    SwitchThings(1,0);
   }
 
   if (SecondController.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)>0.5)
   {
     if (SecondController.GetBumper(frc::GenericHID::JoystickHand::kLeftHand))
     {
-      ClimbLock.Set(true);
-      ClimbRelease.Set(false);
+      SwitchThings(2,1);
     }
     else if(SecondController.GetBumper(frc::GenericHID::JoystickHand::kRightHand))
     {
-      ClimbLock.Set(false);
-      ClimbRelease.Set(true);
+      SwitchThings(2,0);
     }
   }
   //Lift Control
@@ -287,17 +251,39 @@ void Robot::SetShooters(int n)
   ShooterTop.Set(ControlMode::PercentOutput,n);
   ShooterBottom.Set(ControlMode::PercentOutput,n);
 }
-void Robot::SetDrive(int n)
+void Robot::SetDrive(int n,int x)
 {
   DriveLeft1.Set(ControlMode::PercentOutput, n);
   DriveLeft2.Set(ControlMode::PercentOutput, n);
-  DriveRight1.Set(ControlMode::PercentOutput, n);
-  DriveRight2.Set(ControlMode::PercentOutput, n);
+  DriveRight1.Set(ControlMode::PercentOutput, x);
+  DriveRight2.Set(ControlMode::PercentOutput, x);
 }
-void::Robot::SetIntake(int n)
+void Robot::SetIntake(int n)
 {
-  IntakeLeft.Set(-n);
-  IntakeRight.Set(n);
+  IntakeLeft.Set(n);
+  IntakeRight.Set(-1*n);
+}
+void Robot::SwitchThings(int n,bool t)
+{
+  switch(n)
+  {
+    case 0:
+      ArmExtend.Set(t);
+      ArmRetract.Set(!t);
+      break;
+    case 1:
+      ShooterUp.Set(t);
+      ShooterDown.Set(!t);
+      ShooterHigh = t;
+      break;
+    case 2:
+      ClimbLock.Set(t);
+      ClimbRelease.Set(!t);
+      break;
+    default:
+      //should never go through default. If it did, wrong number was passed.
+      break;
+  }
 }
 #ifndef RUNNING_FRC_TESTS
 int main() {
