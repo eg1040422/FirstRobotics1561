@@ -282,6 +282,23 @@ void Robot::TestPeriodic()
 {
 
 }
+void Robot::SetShooters(int n)
+{
+  ShooterTop.Set(ControlMode::PercentOutput,n);
+  ShooterBottom.Set(ControlMode::PercentOutput,n);
+}
+void Robot::SetDrive(int n)
+{
+  DriveLeft1.Set(ControlMode::PercentOutput, n);
+  DriveLeft2.Set(ControlMode::PercentOutput, n);
+  DriveRight1.Set(ControlMode::PercentOutput, n);
+  DriveRight2.Set(ControlMode::PercentOutput, n);
+}
+void::Robot::SetIntake(int n)
+{
+  IntakeLeft.Set(-n);
+  IntakeRight.Set(n);
+}
 #ifndef RUNNING_FRC_TESTS
 int main() {
   return frc::StartRobot<Robot>();
