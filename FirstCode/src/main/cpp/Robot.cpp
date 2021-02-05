@@ -33,7 +33,7 @@ void Robot::AutonomousPeriodic()
   }
   else if(Timer.Get() < 13)
   {
-    SetDrive(2,-2);
+    SetDrive(0.2,-0.2);
   }
   else
   {
@@ -246,19 +246,19 @@ void Robot::TestPeriodic()
 {
 
 }
-void Robot::SetShooters(int n)
+void Robot::SetShooters(float n)
 {
   ShooterTop.Set(ControlMode::PercentOutput,n);
   ShooterBottom.Set(ControlMode::PercentOutput,n);
 }
-void Robot::SetDrive(int n,int x)
+void Robot::SetDrive(float n,float x)
 {
   DriveLeft1.Set(ControlMode::PercentOutput, n);
   DriveLeft2.Set(ControlMode::PercentOutput, n);
   DriveRight1.Set(ControlMode::PercentOutput, x);
   DriveRight2.Set(ControlMode::PercentOutput, x);
 }
-void Robot::SetIntake(int n)
+void Robot::SetIntake(float n)
 {
   IntakeLeft.Set(n);
   IntakeRight.Set(-1*n);

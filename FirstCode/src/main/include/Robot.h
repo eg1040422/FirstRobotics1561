@@ -34,9 +34,9 @@ class Robot : public frc::TimedRobot {
   void TestInit() override;
   void TestPeriodic() override;
 
-  void SetShooters(int);
-  void SetDrive(int,int);
-  void SetIntake(int);
+  void SetShooters(float);
+  void SetDrive(float,float);
+  void SetIntake(float);
   void SwitchThings(int,bool);
   
  private:
