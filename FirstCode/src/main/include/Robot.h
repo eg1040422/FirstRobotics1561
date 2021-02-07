@@ -16,6 +16,10 @@
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableEntry.h>
 #include <frc/VictorSP.h>
+#include <frc/Encoder.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+#include "cameraserver/CameraServer.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -38,7 +42,10 @@ class Robot : public frc::TimedRobot {
   void SetDrive(float,float);
   void SetIntake(float);
   void SwitchThings(int,bool);
-  
+  static void VisionThread();
+  void GalacticSearch();
+  void AutoNav();
+
  private:
   frc::XboxController DriverJoystick{0};
   frc::XboxController SecondController{1};
@@ -59,6 +66,7 @@ class Robot : public frc::TimedRobot {
   frc::Solenoid ClimbLock{4};
   frc::Solenoid ClimbRelease{5};
   frc::Timer Timer;
+  //frc::Encoder {};
   nt::NetworkTableEntry xEntry;
   nt::NetworkTableEntry yEntry;
   double LeftDriveSpeed;

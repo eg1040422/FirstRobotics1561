@@ -285,6 +285,32 @@ void Robot::SwitchThings(int n,bool t)
       break;
   }
 }
+void Robot::VisionThread()
+{
+  //Copied from wpilib. TODO: get it working and change it to work with network tables or something to scan for ball?
+  cs::UsbCamera Camera = frc::CameraServer::GetInstance()->StartAutomaticCapture();
+  Camera.SetResolution(640, 480);
+  cs::CvSink CvSink = frc::CameraServer::GetInstance()->GetVideo();
+  cs::CvSource OutputStreamStd = frc::CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
+  cv::Mat Source;
+  cv::Mat Output;
+  while(true) {
+    if (CvSink.GrabFrame(Source) == 0) {
+      continue;
+    }
+    cvtColor(Source, Output, cv::COLOR_BGR2GRAY);
+    OutputStreamStd.PutFrame(Output);
+  }
+}
+void Robot::GalacticSearch()
+{
+  std::thread visionThread(VisionThread);
+  visionThread.detach();
+}
+void Robot::AutoNav()
+{
+  
+}
 #ifndef RUNNING_FRC_TESTS
 int main() {
   return frc::StartRobot<Robot>();
