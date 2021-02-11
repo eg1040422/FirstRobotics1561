@@ -10,6 +10,9 @@ void Robot::RobotInit()
   RightDriveSpeed = 0;
   Deadband = .15;
   ShooterHigh = true;
+
+  m_chooser.SetDefaultOption("GalacticSearch", GS);
+  m_chooser.AddOption("AutoNav", AN);
 }
 void Robot::RobotPeriodic()
 {
@@ -17,6 +20,19 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
+  m_AutonomousCommand = GetAutonomousCommand();
+
+  if (m_AutonomousCommand != nullptr) {
+    if(m_AutonomousCommand == GS)
+    {
+      GalacticSearch();
+    }
+    else if(m_AutonomousCommand == AN)
+    {
+      AutoNav();
+    }
+  }
+
   Timer.Reset();
   Timer.Start();
 }
@@ -304,12 +320,22 @@ void Robot::VisionThread()
 }
 void Robot::GalacticSearch()
 {
-  std::thread visionThread(VisionThread);
-  visionThread.detach();
+  for(int i = 0; i<5; i++)
+  {
+    SetDrive(0.2,0.2);
+  }
+  SetDrive(0,0);
+  //std::thread visionThread(VisionThread);
+  //visionThread.detach();
 }
 void Robot::AutoNav()
 {
-  
+  SwitchThings(0,1);
+  SwitchThings(0,0);
+}
+frc::Command* Robot::GetAutonomousCommand()
+{
+  return m_chooser.GetSelected();
 }
 #ifndef RUNNING_FRC_TESTS
 int main() {

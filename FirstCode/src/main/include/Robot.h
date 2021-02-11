@@ -20,6 +20,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
 #include "cameraserver/CameraServer.h"
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/commands/Command.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -45,6 +47,7 @@ class Robot : public frc::TimedRobot {
   static void VisionThread();
   void GalacticSearch();
   void AutoNav();
+  frc::Command* GetAutonomousCommand();
 
  private:
   frc::XboxController DriverJoystick{0};
@@ -67,6 +70,11 @@ class Robot : public frc::TimedRobot {
   frc::Solenoid ClimbRelease{5};
   frc::Timer Timer;
   //frc::Encoder {};
+
+  frc::Command* GS;
+  frc::Command* AN;
+  frc::Command* m_AutonomousCommand;
+  frc::SendableChooser<frc::Command*> m_chooser;
   nt::NetworkTableEntry xEntry;
   nt::NetworkTableEntry yEntry;
   double LeftDriveSpeed;
