@@ -11,8 +11,7 @@ void Robot::RobotInit()
   Deadband = .15;
   ShooterHigh = true;
 
-  m_chooser.SetDefaultOption("GalacticSearch", GS);
-  m_chooser.AddOption("AutoNav", AN);
+  
 }
 void Robot::RobotPeriodic()
 {
@@ -20,6 +19,8 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
+  m_chooser.SetDefaultOption("GalacticSearch", GS);
+  m_chooser.AddOption("AutoNav", AN);
   m_AutonomousCommand = GetAutonomousCommand();
 
   if (m_AutonomousCommand != nullptr) {
