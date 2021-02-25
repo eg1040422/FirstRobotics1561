@@ -10,8 +10,9 @@ void Robot::RobotInit()
   RightDriveSpeed = 0;
   Deadband = .15;
   ShooterHigh = true;
-
-  
+  AutonomousList[0] = "GalacticSearch";
+  AutonomousList[1] = "AutoNav";
+  frc::SmartDashboard::PutStringArray("Auto List", AutonomousList);
 }
 void Robot::RobotPeriodic()
 {
@@ -19,7 +20,7 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
-  m_chooser.SetDefaultOption("GalacticSearch", GS);
+  /*m_chooser.SetDefaultOption("GalacticSearch", GS);
   m_chooser.AddOption("AutoNav", AN);
   m_AutonomousCommand = GetAutonomousCommand();
 
@@ -32,14 +33,22 @@ void Robot::AutonomousInit()
     {
       AutoNav();
     }
-  }
-
+  }*/
+  AutoSelected = frc::SmartDashboard::GetString("Auto Selector", "None");
   Timer.Reset();
   Timer.Start();
+  if(AutoSelected == "GalacticSearch")
+  {
+    GalacticSearch();
+  }
+  else if(AutoSelected == "AutoNav")
+  {
+    AutoNav();
+  }
 }
 void Robot::AutonomousPeriodic()
 {
-  SwitchThings(1,1);
+  /*SwitchThings(1,1);
   if (Timer.Get() < 2.0)
   {
     SetShooters(0.35);// spin up shooter
@@ -57,7 +66,7 @@ void Robot::AutonomousPeriodic()
     SetDrive(0,0);
     SetIntake(0);
     SetShooters(0);
-  }
+  }*/
 }
 void Robot::TeleopInit()
 {
@@ -334,10 +343,10 @@ void Robot::AutoNav()
   SwitchThings(0,1);
   SwitchThings(0,0);
 }
-frc::Command* Robot::GetAutonomousCommand()
+/*frc::Command* Robot::GetAutonomousCommand()
 {
   return m_chooser.GetSelected();
-}
+}*/
 #ifndef RUNNING_FRC_TESTS
 int main() {
   return frc::StartRobot<Robot>();

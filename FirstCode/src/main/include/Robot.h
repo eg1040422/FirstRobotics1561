@@ -22,6 +22,7 @@
 #include "cameraserver/CameraServer.h"
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/commands/Command.h>
+#include <iostream>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -47,7 +48,7 @@ class Robot : public frc::TimedRobot {
   static void VisionThread();
   void GalacticSearch();
   void AutoNav();
-  frc::Command* GetAutonomousCommand();
+  //frc::Command* GetAutonomousCommand();
 
  private:
   frc::XboxController DriverJoystick{0};
@@ -71,10 +72,13 @@ class Robot : public frc::TimedRobot {
   frc::Timer Timer;
   //frc::Encoder {};
 
-  frc::Command* GS;
-  frc::Command* AN;
-  frc::Command* m_AutonomousCommand;
-  frc::SendableChooser<frc::Command*> m_chooser;
+  //frc::Command* GS;
+  //frc::Command* AN;
+  //frc::Command* m_AutonomousCommand;
+  //frc::SendableChooser<frc::Command*> m_chooser;
+
+  std::string AutonomousList[2];
+  std::string AutoSelected;
   nt::NetworkTableEntry xEntry;
   nt::NetworkTableEntry yEntry;
   double LeftDriveSpeed;
