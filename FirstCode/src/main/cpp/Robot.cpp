@@ -13,6 +13,7 @@ void Robot::RobotInit()
   AutonomousList[0] = "GalacticSearch";
   AutonomousList[1] = "AutoNav";
   frc::SmartDashboard::PutStringArray("Auto List", AutonomousList);
+  std::cout<<"RobotInit\n";
 }
 void Robot::RobotPeriodic()
 {
@@ -34,6 +35,7 @@ void Robot::AutonomousInit()
       AutoNav();
     }
   }*/
+  std::cout<<"AutoInit\n";
   AutoSelected = frc::SmartDashboard::GetString("Auto Selector", "None");
   Timer.Reset();
   Timer.Start();
@@ -48,6 +50,31 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
+  if(!Done)
+  {
+    std::cout<<"Intial\n";
+  AutonomousList[0] = "GalacticSearch";
+  AutonomousList[1] = "AutoNav";
+  frc::SmartDashboard::PutStringArray("Auto List", AutonomousList);
+  Done = 1;
+  }
+  if(Done == 1)
+  {
+  std::cout<<"AutoPeriodic\n";
+  AutoSelected = frc::SmartDashboard::GetString("Auto Selector", "None");
+  Timer.Reset();
+  Timer.Start();
+  if(AutoSelected == "GalacticSearch")
+  {
+    GalacticSearch();
+  }
+  else if(AutoSelected == "AutoNav")
+  {
+    AutoNav();
+  }
+  Done = 2;
+  std::cout<<"done";
+  }
   /*SwitchThings(1,1);
   if (Timer.Get() < 2.0)
   {
