@@ -47,9 +47,25 @@ void Robot::AutonomousInit()
   {
     AutoNav();
   }
+  run = 0;
 }
 void Robot::AutonomousPeriodic()
 {
+  if(run == 0){
+    frc::SmartDashboard::PutNumber("The string of doom",3);
+    ++run;
+  }
+  int num = frc::SmartDashboard::GetNumber("The string of doom",3);
+  if(num == 3)
+  {
+    std::cout << "3\n";
+  }
+  else
+  {
+    SetDrive(0.25,-0.25);
+    std::cout << "other\n";
+  }
+  
   if(!Done)
   {
     std::cout<<"Intial\n";

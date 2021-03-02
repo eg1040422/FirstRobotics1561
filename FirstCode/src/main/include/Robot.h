@@ -86,4 +86,5 @@ class Robot : public frc::TimedRobot {
   double Deadband;
   bool ShooterHigh;
   int Done;
+  int run;
 };
