@@ -72,19 +72,11 @@ class Robot : public frc::TimedRobot {
   frc::Timer Timer;
   //frc::Encoder {};
 
-  //frc::Command* GS;
-  //frc::Command* AN;
-  //frc::Command* m_AutonomousCommand;
-  //frc::SendableChooser<frc::Command*> m_chooser;
-
-  std::string AutonomousList[2];
-  std::string AutoSelected;
   nt::NetworkTableEntry xEntry;
   nt::NetworkTableEntry yEntry;
   double LeftDriveSpeed;
   double RightDriveSpeed;
   double Deadband;
   bool ShooterHigh;
-  int Done;
-  int run;
+  bool Selected;
 };

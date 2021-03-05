@@ -10,10 +10,6 @@ void Robot::RobotInit()
   RightDriveSpeed = 0;
   Deadband = .15;
   ShooterHigh = true;
-  AutonomousList[0] = "GalacticSearch";
-  AutonomousList[1] = "AutoNav";
-  frc::SmartDashboard::PutStringArray("Auto List", AutonomousList);
-  std::cout<<"RobotInit\n";
 }
 void Robot::RobotPeriodic()
 {
@@ -21,95 +17,24 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
-  /*m_chooser.SetDefaultOption("GalacticSearch", GS);
-  m_chooser.AddOption("AutoNav", AN);
-  m_AutonomousCommand = GetAutonomousCommand();
-
-  if (m_AutonomousCommand != nullptr) {
-    if(m_AutonomousCommand == GS)
-    {
-      GalacticSearch();
-    }
-    else if(m_AutonomousCommand == AN)
-    {
-      AutoNav();
-    }
-  }*/
-  std::cout<<"AutoInit\n";
-  AutoSelected = frc::SmartDashboard::GetString("Auto Selector", "None");
+  frc::SmartDashboard::PutNumber("Program",0);
+  Selected = 0;
   Timer.Reset();
   Timer.Start();
-  if(AutoSelected == "GalacticSearch")
-  {
-    GalacticSearch();
-  }
-  else if(AutoSelected == "AutoNav")
-  {
-    AutoNav();
-  }
-  run = 0;
 }
 void Robot::AutonomousPeriodic()
 {
-  if(run == 0){
-    frc::SmartDashboard::PutNumber("The string of doom",3);
-    ++run;
-  }
-  int num = frc::SmartDashboard::GetNumber("The string of doom",3);
-  if(num == 3)
+  int num = frc::SmartDashboard::GetNumber("Program",0);
+  if(num == 1)
   {
-    std::cout << "3\n";
-  }
-  else
-  {
-    SetDrive(0.25,-0.25);
-    std::cout << "other\n";
-  }
-  
-  if(!Done)
-  {
-    std::cout<<"Intial\n";
-  AutonomousList[0] = "GalacticSearch";
-  AutonomousList[1] = "AutoNav";
-  frc::SmartDashboard::PutStringArray("Auto List", AutonomousList);
-  Done = 1;
-  }
-  if(Done == 1)
-  {
-  std::cout<<"AutoPeriodic\n";
-  AutoSelected = frc::SmartDashboard::GetString("Auto Selector", "None");
-  Timer.Reset();
-  Timer.Start();
-  if(AutoSelected == "GalacticSearch")
-  {
+    ++Selected;
     GalacticSearch();
   }
-  else if(AutoSelected == "AutoNav")
+  else if(num == 2)
   {
+    ++Selected;
     AutoNav();
   }
-  Done = 2;
-  std::cout<<"done";
-  }
-  /*SwitchThings(1,1);
-  if (Timer.Get() < 2.0)
-  {
-    SetShooters(0.35);// spin up shooter
-  } 
-  else if(Timer.Get()< 10.0)
-  {
-    SetIntake(0.2);//feed balls to shooter
-  }
-  else if(Timer.Get() < 13)
-  {
-    SetDrive(0.2,-0.2);
-  }
-  else
-  {
-    SetDrive(0,0);
-    SetIntake(0);
-    SetShooters(0);
-  }*/
 }
 void Robot::TeleopInit()
 {
@@ -373,11 +298,7 @@ void Robot::VisionThread()
 }
 void Robot::GalacticSearch()
 {
-  for(int i = 0; i<5; i++)
-  {
-    SetDrive(0.2,0.2);
-  }
-  SetDrive(0,0);
+  SetDrive(0.2,0.2);
   //std::thread visionThread(VisionThread);
   //visionThread.detach();
 }
