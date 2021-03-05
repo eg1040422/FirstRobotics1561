@@ -24,16 +24,19 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
-  int num = frc::SmartDashboard::GetNumber("Program",0);
-  if(num == 1)
+  if(Selected == 0)
   {
-    ++Selected;
-    GalacticSearch();
-  }
-  else if(num == 2)
-  {
-    ++Selected;
-    AutoNav();
+    int num = frc::SmartDashboard::GetNumber("Program",0);
+    if(num == 1)
+    {
+      ++Selected;
+      GalacticSearch();
+    }
+    else if(num == 2)
+    {
+      ++Selected;
+      AutoNav();
+    }
   }
 }
 void Robot::TeleopInit()
