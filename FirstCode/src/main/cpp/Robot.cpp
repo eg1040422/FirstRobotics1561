@@ -29,12 +29,12 @@ void Robot::AutonomousPeriodic()
     int num = frc::SmartDashboard::GetNumber("Program",0);
     if(num == 1)
     {
-      ++Selected;
+      !Selected;
       GalacticSearch();
     }
     else if(num == 2)
     {
-      ++Selected;
+      !Selected;
       AutoNav();
     }
   }
