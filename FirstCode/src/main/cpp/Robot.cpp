@@ -10,6 +10,8 @@ void Robot::RobotInit()
   RightDriveSpeed = 0;
   Deadband = .15;
   ShooterHigh = true;
+  frc::SmartDashboard::PutNumber("Program",0);
+  Selected = 0;
 }
 void Robot::RobotPeriodic()
 {
@@ -17,8 +19,6 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
-  frc::SmartDashboard::PutNumber("Program",0);
-  Selected = 0;
   Timer.Reset();
   Timer.Start();
 }
