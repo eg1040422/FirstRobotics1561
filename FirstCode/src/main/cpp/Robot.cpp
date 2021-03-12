@@ -29,12 +29,12 @@ void Robot::AutonomousPeriodic()
     int num = frc::SmartDashboard::GetNumber("Program",0);
     if(num == 1)
     {
-      !Selected;
+      Selected = 1;
       GalacticSearch();
     }
     else if(num == 2)
     {
-      !Selected;
+      Selected = 1;
       AutoNav();
     }
   }
@@ -285,25 +285,20 @@ void Robot::SwitchThings(int n,bool t)
 void Robot::VisionThread()
 {
   //Copied from wpilib. TODO: get it working and change it to work with network tables or something to scan for ball?
-  cs::UsbCamera Camera = frc::CameraServer::GetInstance()->StartAutomaticCapture();
-  Camera.SetResolution(640, 480);
-  cs::CvSink CvSink = frc::CameraServer::GetInstance()->GetVideo();
-  cs::CvSource OutputStreamStd = frc::CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
-  cv::Mat Source;
-  cv::Mat Output;
-  while(true) {
-    if (CvSink.GrabFrame(Source) == 0) {
-      continue;
-    }
-    cvtColor(Source, Output, cv::COLOR_BGR2GRAY);
-    OutputStreamStd.PutFrame(Output);
-  }
+  // Creates UsbCamera and MjpegServer [1] and connects them
+  frc::CameraServer::GetInstance()->StartAutomaticCapture();
+  // Creates the CvSink and cmonnects it to the UsbCamera
+  cs::CvSink cvSink = frc::CameraServer::GetInstance()->GetVideo();
+  //eates the CvSource and MjpegServer [2] and connects them
+  cs::CvSource outputStream = frc::CameraServer::GetInstance()->PutVideo("Blur", 640, 480);
+  std::cout << "Jerry was here?!?!\n";
 }
 void Robot::GalacticSearch()
 {
-  SetDrive(0.2,0.2);
+  //SetDrive(0.2,0.2);
   //std::thread visionThread(VisionThread);
   //visionThread.detach();
+  VisionThread();
 }
 void Robot::AutoNav()
 {
